@@ -122,7 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={handleWishlist}
-            className={`absolute top-4 right-4 w-10 h-10 flex items-center justify-center border-2 transition-all z-10 ${
+            className={`absolute top-4 right-4 w-10 h-10 flex items-center justify-center border-2 transition-all cursor-pointer z-10 ${
               isWishlisted 
                 ? 'bg-[--accent] border-[--accent] text-white' 
                 : 'bg-white/10 border-white/30 text-white hover:border-[--accent]'
@@ -171,6 +171,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <span className="font-['Bebas_Neue'] text-3xl text-[--accent] tracking-wider">
               ${product.price.toFixed(2)}
             </span>
+            {discountPercentage > 0 && (
+              <span className="text-xs text-[--accent] font-bold">-{discountPercentage}%</span>
+            )}
             {product.originalPrice && (
               <span className="text-lg text-[--text-muted] line-through font-['Roboto_Condensed']">
                 ${product.originalPrice.toFixed(2)}

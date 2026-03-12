@@ -6,7 +6,7 @@ import { Input } from './input';
 import { Label } from './label';
 import { Checkbox } from './checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from './dialog';
 
 interface NewsletterModalProps {
   isOpen: boolean;
@@ -59,13 +59,14 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ isOpen, onClose }) =>
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md bg-[#0d0d0d] text-white border-2 border-[#1a1a1a] p-0 overflow-hidden">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-[#e50914] text-white border border-white/20 hover:border-[#e50914] transition-all z-10"
-          aria-label="Close newsletter modal"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        <DialogClose asChild>
+          <button
+            className="absolute top-4 right-4 z-50 w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-[#e50914] text-white border border-white/20 hover:border-[#e50914] transition-all"
+            aria-label="Close newsletter modal"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </DialogClose>
 
         <DialogHeader className="text-center p-8 pb-0">
           <DialogTitle className="font-['Bebas_Neue'] text-4xl tracking-[0.1em] text-white mb-2 uppercase">

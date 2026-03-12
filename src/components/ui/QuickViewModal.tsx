@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { Product } from '../../types';
 import { useCart } from '../../context/CartContext';
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from './dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from './dialog';
 
 interface QuickViewModalProps {
   product: Product | null;
@@ -126,38 +126,33 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen, onClos
               )}
             </div>
 
-            {/* CLOSE BUTTON */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center 
-                         rounded-full bg-white/10 hover:bg-[#e50914] transition"
-              aria-label="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {/* WISHLIST */}
-            <button
-              onClick={() => setIsWishlisted(!isWishlisted)}
-              className={`absolute bottom-2.5 right-4 w-10 h-10 flex items-center justify-center rounded-full border transition
-                ${isWishlisted ? 'bg-[#e50914] border-[#e50914]' : 'bg-white/10 border-white/20 hover:border-[#e50914]'}`}
-              aria-label="Add to wishlist"
-            >
-              <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
-            </button>
+            {/* image badges stay but no controls */}
           </div>
 
           {/* DETAILS SECTION */}
           <div className="flex flex-col p-6 lg:p-8 overflow-y-auto max-h-[108vh] bg-[#1a1a1a]">
-            <h2 className="text-l lg:text-3xl font-['Bebas_Neue'] tracking-wide uppercase mb-2">
-              {product.name}
-            </h2>
+            <div className="flex justify-between items-start mb-2">
+              <h2 className="text-l lg:text-3xl font-['Bebas_Neue'] tracking-wide uppercase">
+                {product.name}
+              </h2>
+              <DialogClose asChild>
+                <button
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#e50914] transition"
+                  aria-label="Close quick view modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </DialogClose>
+            </div>
             <p className="text-gray-400 text-sm mb-2">{product.description}</p>
 
             <div className="flex flex-wrap items-baseline gap-3 mb-6">
               <span className="text-xl lg:text-4xl font-bold text-[#e50914]">
                 ${product.price.toFixed(2)}
               </span>
+              {discount > 0 && (
+                <span className="text-sm text-[#e50914] font-bold">-{discount}%</span>
+              )}
               {product.originalPrice && (
                 <>
                   <span className="text-gray-400 line-through text-lg">${product.originalPrice.toFixed(2)}</span>
@@ -177,7 +172,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen, onClos
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`px-4 py-2 border-2 text-sm uppercase rounded transition 
+                      className={`px-4 py-2 border-2 text-sm uppercase rounded transition cursor-pointer
                         ${selectedSize === size
                           ? 'bg-[#e50914] border-[#e50914] text-white'
                           : 'border-gray-600 text-gray-300 hover:border-[#e50914]'}`}
@@ -193,12 +188,12 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen, onClos
             {product.colors.length > 0 && (
               <div className="mb-4">
                 <h4 className="text-gray-400 uppercase text-xs mb-2">Color</h4>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex items-center flex-wrap gap-3">
                   {product.colors.map(color => (
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`w-10 h-10 rounded-full border-2 transition-all ${getColorClass(color)} ${
+                      className={`w-10 h-10 rounded-full border-2 transition-all cursor-pointer ${getColorClass(color)} ${
                         selectedColor === color
                           ? 'border-[#e50914] ring-2 ring-[#e50914]'
                           : 'border-gray-700'
@@ -207,6 +202,14 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen, onClos
                       aria-label={`Select color ${color}`}
                     />
                   ))}
+                  <button
+                    onClick={() => setIsWishlisted(!isWishlisted)}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full border transition cursor-pointer
+                      ${isWishlisted ? 'bg-[#e50914] border-[#e50914] text-white' : 'bg-white/10 border-white/20 hover:border-[#e50914]'}`}
+                    aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                  >
+                    <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
+                  </button>
                 </div>
               </div>
             )}
@@ -223,7 +226,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen, onClos
                   >
                     <Minus className="w-4 h-4" />
                   </button>
-                  <span className="w-4 h-4 flex items-center justify-center text-center font-bold">{quantity}</span>
+                  <span className="min-w-[2rem] flex items-center justify-center text-center font-bold">{quantity}</span>
                   <button
                     onClick={() => handleQuantityChange(1)}
                     disabled={quantity >= (product.stock || 100)}

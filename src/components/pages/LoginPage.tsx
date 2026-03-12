@@ -30,8 +30,7 @@ const LoginPage: React.FC = () => {
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt:', loginData);
-    // Handle login logic here
+    // TODO: implement login logic
   };
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
@@ -40,8 +39,7 @@ const LoginPage: React.FC = () => {
       alert('Passwords do not match');
       return;
     }
-    console.log('Register attempt:', registerData);
-    // Handle registration logic here
+    // TODO: implement registration logic
   };
 
   const socialProviders = [
@@ -158,7 +156,9 @@ const LoginPage: React.FC = () => {
                     key={provider.name}
                     variant="outline"
                     className="w-full"
-                    onClick={() => console.log(`${provider.name} login`)}
+                    onClick={() => {
+                      /* TODO: integrate social login */
+                    }}
                   >
                     {provider.name}
                   </Button>
@@ -221,6 +221,7 @@ const LoginPage: React.FC = () => {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -243,6 +244,7 @@ const LoginPage: React.FC = () => {
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                     >
                       {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -306,7 +308,9 @@ const LoginPage: React.FC = () => {
                     key={provider.name}
                     variant="outline"
                     className="w-full"
-                    onClick={() => console.log(`${provider.name} signup`)}
+                    onClick={() => {
+                      /* TODO: integrate social signup */
+                    }}
                   >
                     {provider.name}
                   </Button>

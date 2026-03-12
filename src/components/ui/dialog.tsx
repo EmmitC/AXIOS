@@ -25,9 +25,21 @@ function DialogPortal({
 }
 
 function DialogClose({
+  className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Close>) {
-  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
+  // default styles mimic the previous built-in close button; consumers
+  // can override or use `asChild` to replace the element entirely.
+  return (
+    <DialogPrimitive.Close
+      data-slot="dialog-close"
+      className={cn(
+        "absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 const DialogOverlay = React.forwardRef<
@@ -52,6 +64,12 @@ function DialogContent({
   children,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content>) {
+  // NOTE: we intentionally do **not** render a close button here anymore.  
+  // Many consumers prefer to position or style their own X icon, and having
+  // a default one resulted in duplicate buttons/overlap and sporadic click
+  // issues (e.g. QuickViewModal).  Use the exported `DialogClose` component
+  // or supply your own `<button onClick={onClose}>` when you need a close
+  // control.
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
@@ -64,10 +82,6 @@ function DialogContent({
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
-          <XIcon />
-          <span className="sr-only">Close</span>
-        </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>
   );
